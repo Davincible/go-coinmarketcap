@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/tyler/go-coinmarketcap"
+	"github.com/Davincible/go-coinmarketcap"
 	"golang.org/x/time/rate"
 )
 

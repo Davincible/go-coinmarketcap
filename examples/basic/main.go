@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/tyler/go-coinmarketcap"
+	"github.com/Davincible/go-coinmarketcap"
 )
 
 func main() {

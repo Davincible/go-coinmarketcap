@@ -16,7 +16,7 @@ A comprehensive, production-ready Go SDK for the CoinMarketCap API. This package
 ## Installation
 
 ```bash
-go get github.com/tyler/go-coinmarketcap
+go get github.com/Davincible/go-coinmarketcap
 ```
 
 ## Quick Start
@@ -29,7 +29,7 @@ import (
     "fmt"
     "log"
     
-    "github.com/tyler/go-coinmarketcap"
+    "github.com/Davincible/go-coinmarketcap"
 )
 
 func main() {
@@ -260,5 +260,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - 📚 [API Documentation](https://coinmarketcap.com/api/documentation/)
-- 🐛 [Issue Tracker](https://github.com/tyler/go-coinmarketcap/issues)
-- 💬 [Discussions](https://github.com/tyler/go-coinmarketcap/discussions)
+- 🐛 [Issue Tracker](https://github.com/Davincible/go-coinmarketcap/issues)
+- 💬 [Discussions](https://github.com/Davincible/go-coinmarketcap/discussions)

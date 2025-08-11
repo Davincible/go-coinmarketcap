@@ -1,4 +1,4 @@
-module github.com/tyler/go-coinmarketcap
+module github.com/Davincible/go-coinmarketcap
 
 go 1.21
 
