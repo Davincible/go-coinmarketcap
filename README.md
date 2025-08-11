@@ -1,5 +1,10 @@
 # Go CoinMarketCap SDK
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/Davincible/go-coinmarketcap.svg)](https://pkg.go.dev/github.com/Davincible/go-coinmarketcap)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Davincible/go-coinmarketcap)](https://goreportcard.com/report/github.com/Davincible/go-coinmarketcap)
+
+**📚 [GoDoc](https://pkg.go.dev/github.com/Davincible/go-coinmarketcap) | 🧪 [Testing Guide](TESTING.md) | 📖 [API Reference](docs/reference.md) | 🚀 [Examples](examples/)**
+
 A comprehensive, production-ready Go SDK for the CoinMarketCap API. This package provides a clean, idiomatic Go interface to interact with all CoinMarketCap API endpoints with built-in rate limiting, retry mechanisms, and comprehensive error handling.
 
 ## Features
