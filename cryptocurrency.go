@@ -2,6 +2,8 @@ package coinmarketcap
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 )
 
 type CryptocurrencyMapOptions struct {
@@ -22,7 +24,9 @@ func (c *Client) GetCryptocurrencyMap(ctx context.Context, opts *CryptocurrencyM
 		}
 		params.AddInt("start", opts.Start)
 		params.AddInt("limit", opts.Limit)
-		params.Add("sort", *opts.Sort)
+		if opts.Sort != nil {
+			params.Add("sort", *opts.Sort)
+		}
 		params.AddStringSlice("symbol", opts.Symbol)
 		params.AddStringSlice("aux", opts.Aux)
 	}
@@ -105,7 +109,9 @@ func (c *Client) GetCryptocurrencyListingsLatest(ctx context.Context, opts *Cryp
 		if opts.CryptocurrencyType != nil {
 			params.Add("cryptocurrency_type", string(*opts.CryptocurrencyType))
 		}
-		params.Add("tag", *opts.Tag)
+		if opts.Tag != nil {
+			params.Add("tag", *opts.Tag)
+		}
 		params.AddStringSlice("aux", opts.Aux)
 	}
 
@@ -147,7 +153,9 @@ func (c *Client) GetCryptocurrencyListingsHistorical(ctx context.Context, opts *
 		if opts.CryptocurrencyType != nil {
 			params.Add("cryptocurrency_type", string(*opts.CryptocurrencyType))
 		}
-		params.Add("tag", *opts.Tag)
+		if opts.Tag != nil {
+			params.Add("tag", *opts.Tag)
+		}
 		params.AddStringSlice("aux", opts.Aux)
 	}
 
@@ -192,7 +200,7 @@ type CryptocurrencyQuotesOptions struct {
 	SkipInvalid *bool
 }
 
-func (c *Client) GetCryptocurrencyQuotesLatest(ctx context.Context, opts *CryptocurrencyQuotesOptions) (*APIResponse[map[string]CryptocurrencyQuote], error) {
+func (c *Client) GetCryptocurrencyQuotesLatest(ctx context.Context, opts *CryptocurrencyQuotesOptions) (*APIResponse[map[string][]CryptocurrencyQuote], error) {
 	params := NewParamBuilder()
 
 	if opts != nil {
@@ -205,7 +213,7 @@ func (c *Client) GetCryptocurrencyQuotesLatest(ctx context.Context, opts *Crypto
 		params.AddBool("skip_invalid", opts.SkipInvalid)
 	}
 
-	return get[map[string]CryptocurrencyQuote](c, ctx, "/v2/cryptocurrency/quotes/latest", &RequestOptions[map[string]CryptocurrencyQuote]{
+	return getCryptocurrencyQuotes(c, ctx, "/v2/cryptocurrency/quotes/latest", &RequestOptions[any]{
 		QueryParams: params.Build(),
 	})
 }
@@ -228,8 +236,12 @@ func (c *Client) GetCryptocurrencyQuotesHistorical(ctx context.Context, opts *Cr
 	if opts != nil {
 		params.AddIntSlice("id", opts.ID)
 		params.AddStringSlice("symbol", opts.Symbol)
-		params.Add("time_start", *opts.TimeStart)
-		params.Add("time_end", *opts.TimeEnd)
+		if opts.TimeStart != nil {
+			params.Add("time_start", *opts.TimeStart)
+		}
+		if opts.TimeEnd != nil {
+			params.Add("time_end", *opts.TimeEnd)
+		}
 		params.AddInt("count", opts.Count)
 		if opts.Interval != nil {
 			params.Add("interval", string(*opts.Interval))
@@ -250,8 +262,12 @@ func (c *Client) GetCryptocurrencyQuotesHistoricalV3(ctx context.Context, opts *
 	if opts != nil {
 		params.AddIntSlice("id", opts.ID)
 		params.AddStringSlice("symbol", opts.Symbol)
-		params.Add("time_start", *opts.TimeStart)
-		params.Add("time_end", *opts.TimeEnd)
+		if opts.TimeStart != nil {
+			params.Add("time_start", *opts.TimeStart)
+		}
+		if opts.TimeEnd != nil {
+			params.Add("time_end", *opts.TimeEnd)
+		}
 		params.AddInt("count", opts.Count)
 		if opts.Interval != nil {
 			params.Add("interval", string(*opts.Interval))
@@ -286,8 +302,12 @@ func (c *Client) GetCryptocurrencyMarketPairsLatest(ctx context.Context, opts *C
 
 	if opts != nil {
 		params.AddInt("id", opts.ID)
-		params.Add("slug", *opts.Slug)
-		params.Add("symbol", *opts.Symbol)
+		if opts.Slug != nil {
+			params.Add("slug", *opts.Slug)
+		}
+		if opts.Symbol != nil {
+			params.Add("symbol", *opts.Symbol)
+		}
 		params.AddInt("start", opts.Start)
 		params.AddInt("limit", opts.Limit)
 		params.AddStringSlice("aux", opts.Aux)
@@ -352,9 +372,15 @@ func (c *Client) GetCryptocurrencyOHLCVHistorical(ctx context.Context, opts *Cry
 		params.AddIntSlice("id", opts.ID)
 		params.AddStringSlice("slug", opts.Slug)
 		params.AddStringSlice("symbol", opts.Symbol)
-		params.Add("time_period", *opts.TimePeriod)
-		params.Add("time_start", *opts.TimeStart)
-		params.Add("time_end", *opts.TimeEnd)
+		if opts.TimePeriod != nil {
+			params.Add("time_period", *opts.TimePeriod)
+		}
+		if opts.TimeStart != nil {
+			params.Add("time_start", *opts.TimeStart)
+		}
+		if opts.TimeEnd != nil {
+			params.Add("time_end", *opts.TimeEnd)
+		}
 		params.AddInt("count", opts.Count)
 		if opts.Interval != nil {
 			params.Add("interval", string(*opts.Interval))
@@ -461,8 +487,12 @@ func (c *Client) GetCryptocurrencyAirdrops(ctx context.Context, opts *Cryptocurr
 			params.Add("status", string(*opts.Status))
 		}
 		params.AddInt("id", opts.ID)
-		params.Add("slug", *opts.Slug)
-		params.Add("symbol", *opts.Symbol)
+		if opts.Slug != nil {
+			params.Add("slug", *opts.Slug)
+		}
+		if opts.Symbol != nil {
+			params.Add("symbol", *opts.Symbol)
+		}
 	}
 
 	return get[[]Airdrop](c, ctx, "/v1/cryptocurrency/airdrops", &RequestOptions[[]Airdrop]{
@@ -538,7 +568,9 @@ func (c *Client) GetCryptocurrencyTrendingGainersLosers(ctx context.Context, opt
 			params.Add("time_period", string(*opts.TimePeriod))
 		}
 		params.AddStringSlice("convert", opts.Convert)
-		params.Add("sort", *opts.Sort)
+		if opts.Sort != nil {
+			params.Add("sort", *opts.Sort)
+		}
 		if opts.SortDir != nil {
 			params.Add("sort_dir", string(*opts.SortDir))
 		}
@@ -547,4 +579,77 @@ func (c *Client) GetCryptocurrencyTrendingGainersLosers(ctx context.Context, opt
 	return get[[]Trending](c, ctx, "/v1/cryptocurrency/trending/gainers-losers", &RequestOptions[[]Trending]{
 		QueryParams: params.Build(),
 	})
+}
+
+// getCryptocurrencyQuotes handles the inconsistent CMC API response format
+// Symbol queries return arrays, ID queries return single objects
+func getCryptocurrencyQuotes(c *Client, ctx context.Context, endpoint string, opts *RequestOptions[any]) (*APIResponse[map[string][]CryptocurrencyQuote], error) {
+	var reqOpts *RequestOptions[any]
+	if opts != nil {
+		reqOpts = &RequestOptions[any]{
+			QueryParams: opts.QueryParams,
+			Headers:     opts.Headers,
+		}
+	}
+
+	resp, err := c.doRequest(ctx, endpoint, reqOpts)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := getResponseBody(resp)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	// First try to parse as the expected array format (symbol queries)
+	var apiResp APIResponse[map[string][]CryptocurrencyQuote]
+	if err := json.Unmarshal(body, &apiResp); err == nil {
+		// Check for API errors
+		if apiResp.Status.ErrorCode != 0 {
+			errorMsg := "API error"
+			if apiResp.Status.ErrorMessage != nil {
+				errorMsg = *apiResp.Status.ErrorMessage
+			}
+			return nil, &APIError{
+				StatusCode: resp.StatusCode,
+				ErrorCode:  apiResp.Status.ErrorCode,
+				Message:    errorMsg,
+			}
+		}
+		return &apiResp, nil
+	}
+
+	// If that fails, try to parse as single object format (ID queries)
+	var apiRespSingle APIResponse[map[string]CryptocurrencyQuote]
+	if err := json.Unmarshal(body, &apiRespSingle); err == nil {
+		// Check for API errors
+		if apiRespSingle.Status.ErrorCode != 0 {
+			errorMsg := "API error"
+			if apiRespSingle.Status.ErrorMessage != nil {
+				errorMsg = *apiRespSingle.Status.ErrorMessage
+			}
+			return nil, &APIError{
+				StatusCode: resp.StatusCode,
+				ErrorCode:  apiRespSingle.Status.ErrorCode,
+				Message:    errorMsg,
+			}
+		}
+		
+		// Convert single objects to arrays for consistent API
+		arrayResult := APIResponse[map[string][]CryptocurrencyQuote]{
+			Data:   make(map[string][]CryptocurrencyQuote),
+			Status: apiRespSingle.Status,
+		}
+		
+		for key, singleQuote := range apiRespSingle.Data {
+			arrayResult.Data[key] = []CryptocurrencyQuote{singleQuote}
+		}
+		
+		return &arrayResult, nil
+	}
+
+	// If both formats fail, return the original unmarshal error
+	return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 }

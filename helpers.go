@@ -85,3 +85,22 @@ func AirdropStatusPtr(a AirdropStatus) *AirdropStatus {
 func ExchangeSortPtr(e ExchangeSort) *ExchangeSort {
 	return &e
 }
+
+// GetPrimaryQuote returns the first (primary) cryptocurrency quote from an array of quotes.
+// This is useful when using GetCryptocurrencyQuotesLatest which returns arrays of quotes per symbol.
+func GetPrimaryQuote(quotes []CryptocurrencyQuote) *CryptocurrencyQuote {
+	if len(quotes) == 0 {
+		return nil
+	}
+	return &quotes[0]
+}
+
+// GetQuoteByID returns the cryptocurrency quote with the specified ID from an array of quotes.
+func GetQuoteByID(quotes []CryptocurrencyQuote, id int) *CryptocurrencyQuote {
+	for _, quote := range quotes {
+		if quote.ID == id {
+			return &quote
+		}
+	}
+	return nil
+}
